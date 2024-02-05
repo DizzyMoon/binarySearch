@@ -24,24 +24,35 @@ function buttonClicked(event){
     //Add HTML elements
     const answerContainer = document.querySelector("#answer-container")
     const number = parseInt(document.querySelector("#number-input").value, 10);
-    let answerElement = document.querySelector(".answer");
+    let recursiveAnswerElement = document.querySelector(".recursive-answer");
+    let whileAnswerElement = document.querySelector(".while-answer")
     
     // Find number
-    let answer = binarySearchRecursive(globalList, number);
-    console.log("" + answer);
+    let recursiveAnswer = binarySearchRecursive(globalList, number);
+    console.log("" + recursiveAnswer);
+
+    let whileAnswer = whileBinarySearch(globalList, number);
+    console.log("" + whileAnswer)
+
+
 
     // Handle if answer does not exist in list
-    if (answer === -1){
-        answerElement.innerHTML = "The given number does not exist in the list";
+    if (recursiveAnswer === -1){
+        recursiveAnswerElement.innerHTML = "Using recursive: The given number does not exist in the list";
     } else {
-        answerElement.innerHTML = `The given number is at index: ${answer}`;
+        recursiveAnswerElement.innerHTML = `Using recursive: The given number is at index: ${recursiveAnswer}`;
+    }
+
+    if (whileAnswerElement === -1) {
+        whileAnswerElement.innerHTML = "Using while-loop: The given number does not exist in the list";
+    } else {
+        whileAnswerElement.innerHTML = `Using while-loop: The given number is at index: ${whileAnswer}`;
     }
 }
 
 // Recursive binary search
 function binarySearchRecursive(listIn, number, offset = 0) {
-    let maxIndex = listIn.length;
-    let median = Math.floor(maxIndex / 2)
+    let median = Math.floor(listIn.length / 2)
 
     if (number === listIn.at(median) ){
         return median + offset;
@@ -52,10 +63,37 @@ function binarySearchRecursive(listIn, number, offset = 0) {
         return binarySearchRecursive(newList, number, offset);
     }
     
+
     if (number > listIn.at(median)) {
         let newList = listIn.slice(median + 1)
         return binarySearchRecursive(newList, number, median + offset + 1);
     }
 
     return -1;
+}
+
+function whileBinarySearch(listIn, number) {
+    let max = listIn.length-1
+    let min = 0;
+    let median = Math.floor((max + min) / 2)
+    while (max - min > 0){
+        if (number > listIn.at(median)){
+            min = number;
+            median = Math.floor((max + min) / 2) - 1
+        }
+        if (number < listIn.at(median)) {
+            max = number;
+            median = Math.floor((max + min) / 2) - 1
+        }
+        
+         
+    }
+
+    if (number === listIn.at(median)) {
+        return median;
+    } else {
+        return -1;
+    }
+    
+    
 }
