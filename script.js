@@ -1,5 +1,4 @@
 "use strict"
-
 window.addEventListener("DOMContentLoaded", start)
 
 //Global variables
@@ -13,23 +12,25 @@ let globalList = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10
           70, 71, 72, 73, 74, 75, 76, 77, 78, 79,
            80, 81, 82, 83, 84, 85, 86, 87, 88, 89,
             90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100];
+
 function start() {
     console.log("Javascript is running")
 }
 
 function buttonClicked(event){
-    
+    //Prevent refresh
     event.preventDefault();
 
+    //Add HTML elements
     const answerContainer = document.querySelector("#answer-container")
     const number = parseInt(document.querySelector("#number-input").value, 10);
+    let answerElement = document.querySelector(".answer");
     
-    let answer = binarySearch(globalList, number);
-
+    // Find number
+    let answer = binarySearchRecursive(globalList, number);
     console.log("" + answer);
 
-    let answerElement = document.querySelector(".answer");
-
+    // Handle if answer does not exist in list
     if (answer === -1){
         answerElement.innerHTML = "The given number does not exist in the list";
     } else {
@@ -37,24 +38,23 @@ function buttonClicked(event){
     }
 }
 
-function binarySearch(listIn, number, offset = 0) {
+// Recursive binary search
+function binarySearchRecursive(listIn, number, offset = 0) {
     let maxIndex = listIn.length;
     let median = Math.floor(maxIndex / 2)
 
     if (number === listIn.at(median) ){
-        let result = median + offset;
-        return result;
+        return median + offset;
     }
 
     if (number < listIn.at(median)) {
         let newList = listIn.slice(0, median);
-        
-        return binarySearch(newList, number, offset);
+        return binarySearchRecursive(newList, number, offset);
     }
-
+    
     if (number > listIn.at(median)) {
         let newList = listIn.slice(median + 1)
-        return binarySearch(newList, number, median + offset + 1);
+        return binarySearchRecursive(newList, number, median + offset + 1);
     }
 
     return -1;
